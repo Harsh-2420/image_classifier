@@ -5,7 +5,7 @@ import os
 import cv2
 import random
 import pickle
-import tqdm
+from tqdm import tqdm
 
 img_size = 100
 dataset = "/Users/harshjhunjhunwala/Desktop/projects/image_classifier/cat_dog_dataset/PetImages"
@@ -16,10 +16,13 @@ def create_train():
     for t_class in classes:
         path = os.path.join(dataset, t_class)
         class_num = classes.index(t_class)
-        for img in os.listdir(path):
-            img_array = cv2.imread(os.path.join(path, img) ,cv2.IMREAD_GRAYSCALE)
-            new_array = cv2.resize(img_array, (img_size, img_size))
-            training_data.append([new_array, class_num])
+        for img in tqdm(os.listdir(path)):
+            try:
+                img_array = cv2.imread(os.path.join(path, img) ,cv2.IMREAD_GRAYSCALE)
+                new_array = cv2.resize(img_array, (img_size, img_size))
+                training_data.append([new_array, class_num])
+            except Exception as e:
+                pass
 
 create_train()
 random.shuffle(training_data)
